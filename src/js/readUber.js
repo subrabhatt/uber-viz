@@ -72,7 +72,7 @@ function showChord(canvas, data) {
 	//calculate total sum per start/end
 	var markerTotal = d3.nest()
 		.key(function (d) { return (d[8]+d[10]); })
-		.rollup(function (v) { return d3.sum(v, function (d) { return d[4]; });
+		.rollup(function (v) { return d3.sum(v, function (d) { return d[13]; });
 		})
 		.entries(data);
 
@@ -247,7 +247,7 @@ function drawBar(canvas, data) {
 	x.domain(data.map(function (d) {
 			return d[1];}));
 	y.domain([0, d3.max(data, function (d) {
-				return Math.floor(d[4]);
+				return Math.floor(d[13]);
 			})]);
 
 	var barWidth = width / data.length;
@@ -283,14 +283,14 @@ function drawBar(canvas, data) {
 	bar.append("rect")
 		.attr("class", "bar")
 		.attr("y", function (d) {
-			return y(d[4]);
+			return y(d[13]);
 		})
 		.attr("height", function (d) {
-			return height - y(d[4]);
+			return height - y(d[13]);
 		})
 		.attr("width", barWidth-1)
 		.append("title").html(function (d, i) {
-			return d[8] + " -->  " + d[10] + "<br/>" + d[5]+ "<br/>" +d[1]+" "+d[7]+ " to "+d[9]+ "<br/>" +d[3]+d[4];
+			return d[8] + " -->  " + d[10] + "<br/>" + d[5]+ "<br/>" +d[1]+" "+d[7]+ " to "+d[9]+ "<br/>" +d[13]+" Local "+d[3]+" "+d[4];
 		});
 
 	//resize based on window
@@ -315,17 +315,17 @@ function drawPie(canvas, data) {
 
 	var TypeTotal = d3.nest()
 		.key(function (d) { return d[5]; })
-		.rollup(function (v) { return d3.sum(v, function (d) { return d[4]; });
+		.rollup(function (v) { return d3.sum(v, function (d) { return d[13]; });
 		})
 		.entries(data);
 	var DateTotal = d3.nest()
 		.key(function (d) { return Date.parse(d[1]).toString("MMM yy"); })
-		.rollup(function (v) { return d3.sum(v, function (d) { return d[4]; });
+		.rollup(function (v) { return d3.sum(v, function (d) { return d[13]; });
 		})
 		.entries(data);
 	var CityTotal = d3.nest()
 		.key(function (d) { return d[6]; })
-		.rollup(function (v) { return d3.sum(v, function (d) { return d[4]; });
+		.rollup(function (v) { return d3.sum(v, function (d) { return d[13]; });
 		})
 		.entries(data);
 	var allSegment = [TypeTotal,CityTotal,DateTotal];
@@ -426,9 +426,9 @@ function drawMap(map) {
 
 		(function renderr(data, i){       
    			setTimeout(function () { 		
-				var contentStart = "<br/>To : " + data[i][10] + "<br/>Departure:" + data[i][1]+" "+data[i][7]+ "<br/>Cost: " +data[i][3]+data[i][4];
+				var contentStart = "<br/>To : " + data[i][10] + "<br/>Departure:" + data[i][1]+" "+data[i][7]+ "<br/>Cost: "+data[i][13]+" Local "+data[i][3]+" "+data[i][4];
 				//console.log(contentStart);
-				var contentEnd = "<br/>From : "+data[i][8]+ "<br/>Arrival:" + data[i][1]+" "+data[i][9]+ "<br/>Cost: " +data[i][3]+data[i][4];
+				var contentEnd = "<br/>From : "+data[i][8]+ "<br/>Arrival:" + data[i][1]+" "+data[i][9]+ "<br/>Cost: "+data[i][13]+" Local "+data[i][3]+" "+data[i][4];
 				requestDirections(new google.maps.LatLng(data[i][11][0], data[i][11][1]), new google.maps.LatLng(data[i][12][0], data[i][12][1]), contentStart, contentEnd);             
       				if (i--) renderr(data, i);      
    			}, 1)
